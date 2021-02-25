@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7000 bytes
+Current configuration : 7399 bytes
 !
-! Last configuration change at 16:21:56 UTC Mon Feb 22 2021 by developer
+! Last configuration change at 09:37:22 UTC Thu Feb 25 2021 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -17,6 +17,22 @@ hostname csr1000v-1
 boot-start-marker
 boot-end-marker
 !
+!
+vrf definition Ayushi
+ description Ayushi VRF
+ rd 1:13
+!
+vrf definition blue
+ description Blue VRF
+ rd 1:410
+!
+vrf definition green
+ description Green VRF
+ rd 1:420
+!
+vrf definition red
+ description Red VRF
+ rd 1:400
 !
 no logging console
 enable secret 9 $9$4fdKs44VXjq2x.$Zahb8Zy6RQwM9ONMvWkNq4k3igSv4v2KkH/uUuqr09s
@@ -140,7 +156,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9QFG63DVP7O
+license udi pid CSR1000V sn 9XSJLRD92XC
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -179,9 +195,25 @@ redundancy
 ! 
 !
 !
-interface Loopback44
- description Pod Number 44
- ip address 10.111.44.1 255.255.255.255
+interface Loopback1113
+ description Pod Number 1113
+ vrf forwarding red
+ no ip address
+!
+interface Loopback1213
+ description Pod Number 1213
+ vrf forwarding blue
+ no ip address
+!
+interface Loopback1313
+ description Pod Number 1313
+ vrf forwarding green
+ no ip address
+!
+interface Loopback1413
+ description Pod Number 1413
+ vrf forwarding Ayushi
+ no ip address
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
@@ -245,10 +277,6 @@ line vty 0 4
  login local
  transport input ssh
 !
-ntp server 10.11.44.65
-ntp server 10.12.44.65
-ntp server 10.13.44.65
-ntp server 10.14.44.65
 !
 !
 !
